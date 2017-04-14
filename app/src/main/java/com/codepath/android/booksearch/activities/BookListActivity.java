@@ -15,14 +15,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.andtinder.model.CardModel;
-import com.andtinder.view.CardContainer;
-import com.andtinder.view.SimpleCardStackAdapter;
 import com.codepath.android.booksearch.R;
 import com.codepath.android.booksearch.adapters.BookAdapter;
 import com.codepath.android.booksearch.models.Book;
 import com.codepath.android.booksearch.net.BookClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -39,8 +37,7 @@ public class BookListActivity extends ActionBarActivity {
     private BookClient client;
     private ProgressBar progress;
 
-    // Card Container
-    private CardContainer mCardContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,76 +45,61 @@ public class BookListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_book_list);
 
         //lvBooks = (ListView) findViewById(R.id.lvBooks);
-        ArrayList<Book> aBooks = new ArrayList<Book>();
+        final ArrayList<Book> aBooks = new ArrayList<Book>();
 
-        // Card container
-        mCardContainer = (CardContainer) findViewById(R.id.layoutview);
-
-        Resources r = getResources();
         // initialize the adapter
-        bookAdapter = new BookAdapter(this, aBooks);
-
-        // TEST. Use Swipeable cards
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getApplicationContext());
-
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        bookAdapter = new BookAdapter(this, R.layout.item, aBooks);
 
         // attach the adapter to the ListView
         //lvBooks.setAdapter(bookAdapter);
         progress = (ProgressBar) findViewById(R.id.progress);
         //setupBookSelectedListener();
 
-        CardModel cardModel = new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1));
+        // Test
+        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
-        cardModel.setOnClickListener(new CardModel.OnClickListener() {
+        flingContainer.setAdapter(bookAdapter);
+
+        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
-            public void OnClickListener() {
-                Toast.makeText(BookListActivity.this, "Pressing the card", Toast.LENGTH_LONG).show();
+            public void removeFirstObjectInAdapter() {
+                Toast.makeText(BookListActivity.this, "REMOVED OBJECT", Toast.LENGTH_SHORT).show();
+                aBooks.remove(0);
+                bookAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onLeftCardExit(Object o) {
+                Toast.makeText(BookListActivity.this, "Left!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRightCardExit(Object o) {
+                Toast.makeText(BookListActivity.this, "Right", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdapterAboutToEmpty(int i) {
+                // Ask more data here
+                // e.g call network API
+            }
+
+            @Override
+            public void onScroll(float v) {
+                // DO action here.
             }
         });
 
-        cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
-            public void onLike() {
-                Toast.makeText(BookListActivity.this, "I LIKE THIS", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onDislike() {
-                Toast.makeText(BookListActivity.this, "MEH!", Toast.LENGTH_LONG).show();
+            public void onItemClicked(int i, Object o) {
+                Toast.makeText(BookListActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(BookListActivity.this, BookDetailActivity.class);
+                intent.putExtra(BOOK_DETAIL_KEY, bookAdapter.getItem(i));
+                startActivity(intent);
             }
         });
 
-        adapter.add(cardModel);
-        mCardContainer.setAdapter(adapter);
     }
 
 

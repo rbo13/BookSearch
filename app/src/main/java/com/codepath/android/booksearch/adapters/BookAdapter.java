@@ -23,8 +23,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
         public TextView tvAuthor;
     }
 
-    public BookAdapter(Context context, ArrayList<Book> aBooks) {
-        super(context, 0, aBooks);
+    public BookAdapter(Context context, int layout, ArrayList<Book> aBooks) {
+        super(context, layout, aBooks);
     }
 
     // Translates a particular `Book` given a position
@@ -38,7 +38,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_book, parent, false);
+            convertView = inflater.inflate(R.layout.item, parent, false);
             viewHolder.ivCover = (ImageView)convertView.findViewById(R.id.ivBookCover);
             viewHolder.tvTitle = (TextView)convertView.findViewById(R.id.tvTitle);
             viewHolder.tvAuthor = (TextView)convertView.findViewById(R.id.tvAuthor);

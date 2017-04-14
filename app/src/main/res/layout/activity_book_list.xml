@@ -1,9 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".BookListActivity">
+<merge
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools" >
 
     <ProgressBar
         android:id="@+id/progress"
@@ -14,9 +12,12 @@
         android:indeterminate="true"
         android:visibility="gone" />
 
-    <com.andtinder.view.CardContainer
-        android:id="@+id/layoutview"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-</LinearLayout>
+    <com.lorentzos.flingswipe.SwipeFlingAdapterView
+        android:id="@+id/frame"
+        android:background="#ffeee9e2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:rotation_degrees="15.5"
+        tools:context=".MyActivity" />
+
+</merge>
