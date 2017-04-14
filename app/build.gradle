@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.codepath.android.booksearch"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.loopj.android:android-async-http:1.4.6'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.github.kikoso:SwipeableCards:1.1-RELEASE@aar'
 }
