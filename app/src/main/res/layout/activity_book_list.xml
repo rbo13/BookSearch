@@ -14,8 +14,9 @@
         android:indeterminate="true"
         android:visibility="gone" />
 
-    <ListView
-        android:id="@+id/lvBooks"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <com.andtinder.view.CardContainer
+        android:id="@+id/layoutview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>

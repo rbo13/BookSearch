@@ -1,17 +1,23 @@
 package com.codepath.android.booksearch.activities;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.andtinder.model.CardModel;
+import com.andtinder.view.CardContainer;
+import com.andtinder.view.SimpleCardStackAdapter;
 import com.codepath.android.booksearch.R;
 import com.codepath.android.booksearch.adapters.BookAdapter;
 import com.codepath.android.booksearch.models.Book;
@@ -33,20 +39,88 @@ public class BookListActivity extends ActionBarActivity {
     private BookClient client;
     private ProgressBar progress;
 
+    // Card Container
+    private CardContainer mCardContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        lvBooks = (ListView) findViewById(R.id.lvBooks);
+        //lvBooks = (ListView) findViewById(R.id.lvBooks);
         ArrayList<Book> aBooks = new ArrayList<Book>();
+
+        // Card container
+        mCardContainer = (CardContainer) findViewById(R.id.layoutview);
+
+        Resources r = getResources();
         // initialize the adapter
         bookAdapter = new BookAdapter(this, aBooks);
+
+        // TEST. Use Swipeable cards
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getApplicationContext());
+
+        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
+        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
+        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
+        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+
         // attach the adapter to the ListView
-        lvBooks.setAdapter(bookAdapter);
+        //lvBooks.setAdapter(bookAdapter);
         progress = (ProgressBar) findViewById(R.id.progress);
-        setupBookSelectedListener();
+        //setupBookSelectedListener();
+
+        CardModel cardModel = new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1));
+
+        cardModel.setOnClickListener(new CardModel.OnClickListener() {
+            @Override
+            public void OnClickListener() {
+                Toast.makeText(BookListActivity.this, "Pressing the card", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+            @Override
+            public void onLike() {
+                Toast.makeText(BookListActivity.this, "I LIKE THIS", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onDislike() {
+                Toast.makeText(BookListActivity.this, "MEH!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        adapter.add(cardModel);
+        mCardContainer.setAdapter(adapter);
     }
+
+
 
     public void setupBookSelectedListener() {
         lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
